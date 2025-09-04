@@ -1,21 +1,35 @@
-FROM node:15 as builder
+# Multi-stage build for production
+FROM node:15-alpine as builder
 
-WORKDIR
+# Set working directory
+WORKDIR /app
 
-COPY
+# Copy package files
+COPY package*.json ./
 
-RUN 
+# Install dependencies
+RUN npm ci --only=production
 
-COPY
+# Copy source code
+COPY . .
 
-RUN 
+# Set Node options for legacy OpenSSL
+ENV NODE_OPTIONS=--openssl-legacy-provider
 
-FROM
+# Build the application
+RUN npm run build
 
-WORKDIR
+# Production stage
+FROM nginx:alpine
 
-COPY
+# Copy built application from builder stage
+COPY --from=builder /app/build /usr/share/nginx/html
 
-RUN 
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/nginx.conf
 
-ENTRYPOINT 
+# Expose port 80
+EXPOSE 80
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"] 
