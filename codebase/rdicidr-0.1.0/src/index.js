@@ -4,6 +4,9 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+
+var unusedVar = 42   // 👈 This triggers ESLint: "unused variable"
+
 ReactDOM.render(
   <React.StrictMode>
     <App />
