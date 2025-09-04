@@ -1,18 +1,18 @@
-import Octet from "./Octet";
-import Netmask from "./Netmask";
-import SubnetNumbersInput from "./SubnetNumbersInput";
-import React, { useState } from "react";
-import { IPv4 } from "./lib/ipv4";
-import "./IPv4Addr.css";
+import Octet from './Octet';
+import Netmask from './Netmask';
+import SubnetNumbersInput from './SubnetNumbersInput';
+import React, { useState } from 'react';
+import { IPv4 } from './lib/ipv4';
+import './IPv4Addr.css';
 
-const IPv4Addr = (props) => {
+const IPv4Addr = props => {
   const [ipv4, setIpv4] = useState(new IPv4([10, 0, 8, 0], 21));
   const [validAddress, setValidAddress] = useState(true);
   const [showSubnetting, setShowSubnetting] = useState(true);
   const [subnetsNumber, setSubnetsNumber] = useState(0);
 
   const setOctet = (octet, index, change) => {
-    let updatedAddress = [...ipv4.address];
+    const updatedAddress = [...ipv4.address];
     if (change) {
       updatedAddress[index] = +octet;
       setIpv4(new IPv4(updatedAddress, ipv4.mask));
@@ -31,8 +31,8 @@ const IPv4Addr = (props) => {
     }
   };
 
-  const displayNetmasks = (netmasks) => {
-    let netmasksElements = [];
+  const displayNetmasks = netmasks => {
+    const netmasksElements = [];
     netmasks.forEach((e, index) => {
       netmasksElements.push(
         <div key={`networkAddress-${index}`}>
@@ -58,7 +58,7 @@ const IPv4Addr = (props) => {
               {index < 3 ? <span>.</span> : <span className="slash">/</span>}
             </div>
           );
-        })}{" "}
+        })}{' '}
         <Netmask
           value={ipv4.mask}
           setValid={setValidAddress}
@@ -115,7 +115,7 @@ const IPv4Addr = (props) => {
           </div>
         </div>
       ) : (
-        ""
+        ''
       )}
 
       <div className="subnets">
@@ -124,7 +124,7 @@ const IPv4Addr = (props) => {
           name="showSubnetting"
           type="checkbox"
           checked={showSubnetting}
-          onChange={(e) => {
+          onChange={e => {
             setShowSubnetting(e.target.checked);
           }}
         />
@@ -145,7 +145,7 @@ const IPv4Addr = (props) => {
             </div>
           </div>
         ) : (
-          ""
+          ''
         )}
       </div>
     </div>
