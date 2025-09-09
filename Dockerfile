@@ -1,21 +1,45 @@
-FROM node:15 as builder
+# Multi-stage build for production
+FROM node:15-alpine as builder
 
-WORKDIR
+# Set working directory
+WORKDIR /app
 
-COPY
+# Copy package files
+COPY package*.json ./
 
-RUN 
+# Install dependencies with better network settings
+RUN npm config set registry https://registry.npmjs.org/ && \
+    npm config set timeout 300000 && \
+    npm config set fetch-retries 5 && \
+    npm install
 
-COPY
+# Copy source code
+COPY . .
 
-RUN 
+# Build the application
+RUN npm run build
 
-FROM
+# Production stage
+FROM node:15-alpine
 
-WORKDIR
+# Set working directory
+WORKDIR /app
 
-COPY
+# Copy package files
+COPY package*.json ./
 
-RUN 
+# Install only production dependencies
+RUN npm config set registry https://registry.npmjs.org/ && \
+    npm config set timeout 300000 && \
+    npm config set fetch-retries 5 && \
+    npm install --only=production
 
-ENTRYPOINT 
+# Copy built application and server from builder stage
+COPY --from=builder /app/build ./build
+COPY --from=builder /app/server.js ./
+
+# Expose port 8080
+EXPOSE 8080
+
+# Start the server
+CMD ["node", "server.js"] 
