@@ -1,15 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ingress-wildcard-host
+  name: fsl-challenge-service
+  namespace: production
+  labels:
+    app: fsl-challenge-app
 spec:
+  type: ClusterIP
   ports:
   - port: 8080
-    name: web
-  clusterIP: None
+    targetPort: 8080
+    protocol: TCP
+    name: http
   selector:
-    app: app-name
----
-apiVersion: apps/v1
-kind: StatefulSet
-## TODO: Complete the rest
+    app: fsl-challenge-app
